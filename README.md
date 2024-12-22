@@ -66,3 +66,65 @@ Prerequisities:
 Libwacom files elan-425a.tablet and elan-425b.tablet should be copied to /usr/share/libwacom
 For brightness sync to work properly, line 10 of the duo.sh should be modified to `backlight=card1-eDP-2-backlight`
 
+
+---
+# Prerequisities ubuntu 2210
+```sh
+# ref: https://fostips.com/multiple-monitors-turn-off-any-ubuntu/
+sudo apt install git libcairo2-dev cmake meson ninja-build libglib2.0-dev
+git clone https://github.com/jadahl/gnome-monitor-config.git
+cd gnome-monitor-config
+meson build
+cd build
+meson compile
+ln -s /path/build/scr/gnome-monitor-config /usr/local/bin/gnome-monitor-config
+
+
+sudo apt-get install inotify-tools python3-pip
+sudo pip install pyusb --break-system-packages
+sudo ln -s /path/to/zenbook-duo-2024-ux8406ma-linux/duo /usr/local/bin/duo
+```
+---
+# fix rotation
+
+```sh
+gnome-session-properties # add `duo watch-rotation`
+```
+
+---
+
+# fix touchpad mapping
+```sh
+# ref: https://area-51.blog/2023/07/01/linux-on-the-asus-zenbook-duo-pro-14/
+
+`xrandr` # get display names eDP-1 and eDP-1
+
+`xinput` # get Touchpad ids
+
+# map zenbook duo touchpads
+`xinput map-to-output "ELAN9008:00 04F3:4259" eDP-1`
+`xinput map-to-output "ELAN9009:00 04F3:42EC" eDP-2`
+
+# add to .bashrc
+```
+
+---
+# fix Duo Brightness Sync
+```sh
+
+sudo ln -s /path/to/zenbook-duo-2024-ux8406ma-linux/brightness-sync.service /etc/systemd/system/brightness-sync.service
+systemctl daemon-reload
+systemctl enable brightness-sync --now
+systemctl status brightness-sync
+```
+
+---
+# useful manual commands
+```sh
+duo toggle # disable 2nd monitor
+duo set-kb-backlight 3 # max brightness keyboard (connected only)
+duo set-kb-backlight 0 # disable brightness keyboard (connected only)
+
+duo bat-limit 95 # battery charge limit
+
+```

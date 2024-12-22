@@ -1,11 +1,15 @@
-[Service]
+[Unit]
 Description=Sync Brightness of Duo Screens
 After=network.target
-StartLimitIntervalSec=0[Service]
+StartLimitIntervalSec=10
+StartLimitBurst=10
+
+
+[Service]
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=/usr/bin/env /change/this/path/to/duo watch-backlight
+ExecStart=/usr/bin/env /usr/local/bin/duo watch-backlight
 
 [Install]
 WantedBy=multi-user.target
